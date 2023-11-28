@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Nearby Shops</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #3498db;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        function setDefaultLocation() {
+            if (navigator.permissions) {
+                navigator.permissions.query({ name: 'geolocation' })
+                    .then((permissionStatus) => {
+                        if (permissionStatus.state === 'granted') {
+                            // Geolocation permission is already granted
+                            getCurrentLocation();
+                        } else {
+                            // Request geolocation permission
+                            navigator.geolocation.getCurrentPosition(
+                                function (position) {
+                                    const latitude = position.coords.latitude;
+                                    const longitude = position.coords.longitude;
+                                    document.getElementById('location').value = `${latitude}, ${longitude}`;
+                                },
+                                function (error) {
+                                    console.error('Error getting geolocation:', error);
+                                }
+                            );
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error checking geolocation permission:', error);
+                    });
+            } else if (navigator.geolocation) {
+                // Geolocation is supported but permissions API is not available (fallback for older browsers)
+                getCurrentLocation();
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+        }
+
+        function getCurrentLocation() {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    document.getElementById('location').value = `${latitude}, ${longitude}`;
+                },
+                function (error) {
+                    console.error('Error getting geolocation:', error);
+                }
+            );
+        }
+    </script>
+</head>
+
+<body>
+
+    <h1>Nearby Shops</h1>
+
+    <!-- Add a form for inputting location -->
+    <form action="{% url 'find_shops' %}" method="post">
+        {% csrf_token %}
+        <label for="location">Enter your location:</label>
+        <input type="text" id="location" name="location" required>
+        <button type="submit">Find Nearby Shops</button>
+        <!-- Add a button to set the default location -->
+        <button type="button" onclick="setDefaultLocation()">Use Default Location</button>
+    </form>
+
+    {% if shops %}
+    <ul>
+        {% for shop in shops %}
+        <li>
+            {{ shop.name }} : {{ shop.distance }} 
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+
+</html>
