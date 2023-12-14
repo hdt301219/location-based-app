@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "jet.dashboard",
+    "jet",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,6 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "shops",
+    "login",
+    "register",
+    "items",
 ]
 
 MIDDLEWARE = [
@@ -128,7 +133,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 GDAL_LIBRARY_PATH = r'C:/Users/Admin/anaconda3/envs/learn1/Lib/site-packages/osgeo/gdal304.dll'
 GEOS_LIBRARY_PATH = r'C:/Users/Admin/anaconda3/envs/learn1/Lib/site-packages/osgeo/geos_c.dll'
 APPEND_SLASH = False
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

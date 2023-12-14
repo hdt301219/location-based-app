@@ -1,0 +1,115 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" class="Gibbu_@hotmail.com">
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Discord inspired Login/Register Form</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!-- JQUERY AND NORMALIZED CSS INSTALLED
+View settings for more info. -->
+
+
+<div id="formContainer">
+	
+	<div class="formLeft">
+		<img src="{% static 'shark.jpg' %}">
+	</div>
+	<div class="formRight">
+		<!-- Forgot password form -->
+		<form id="forgot" class="otherForm">
+			<header>
+				<h1>Forgot Password</h1>
+				<p>Seems like your password is missing</p>
+			</header>
+			<section>
+				<label>
+					<p>Email</p>
+					<input type="email" placeholder=" ">
+					<div class="border"></div>
+				</label>
+				<button type="submit">Send email</button>
+			</section>
+			<footer>
+				<button type="button" class="forgotBtn">Back</button>
+			</footer>
+		</form>
+		
+		<!-- Login form -->
+		<form class="form-signin" action="{{loc}}" method="POST">
+      	{% csrf_token %}
+	  {% if registration_success %}
+	  	<div class="alert alert-success" role="alert">Registration successful! Please log in.</div>
+        {% endif %}
+      <div class="{{errorclass}}" role="alert">{{error}}</div>
+			<header>
+				<h1>Welcome back</h1>
+				<p>Login to continue</p>
+			</header>
+			<section>
+				<label>
+					<p>Username</p>
+					<input type="email" id="inputEmail" placeholder="Email address" required="" autofocus="" name="email">
+					<div class="border"></div>
+				</label>
+				<label>
+					<p>Password</p>
+					<input type="password" id="inputPassword" placeholder="Password" required="" name="password">
+					<div class="border"></div>
+				</label>
+				<button class="acceptBtn" type="submit">Log in</button>
+			</section>
+			<footer>
+				<button type="button" class="forgotBtn">Forgot password?</button>
+				<button type="button" class="registerBtn">Need an account?</button>
+			</footer>
+		</form>
+		
+	<!-- Register form -->
+	<form id="register" class="otherForm" action="register/" method="POST">
+			{% csrf_token %}
+        	<div class="{{errorclass}}" role="alert">{{error}}</div>
+			<header>
+				<h1>Become a Bro</h1>
+				<p>Register to gain full access</p>
+			</header>
+			<section>
+				<label>
+					<p>Username</p>
+					<input type="text" id="inputname" class="form-control" placeholder="Username" required="" autofocus="" name="name">
+					<div class="border"></div>
+				</label>
+				<label>
+					<p>Email</p>
+					<input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="" name="email">
+					<div class="border"></div>
+				</label>
+				<label>
+					<p>Password</p>
+					<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" name="password">
+					<div class="border"></div>
+				</label>
+				<label>
+					<p>Repeat Password</p>
+					<input type="password" id="inputPassword" class="form-control" placeholder="Confirm Password" required="" name="password1">
+					<div class="border"></div>
+				</label>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Register!</button>
+			</section>
+			<footer>
+				<button type="button" class="registerBtn">Back</button>
+			</footer>
+		</form>
+	</div>
+	
+</div>
+<!-- partial -->
+  <script  src="{% static 'script.js' %}"></script>
+
+</body>
+</html>

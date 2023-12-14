@@ -2,10 +2,11 @@ import logging
 from django.views import generic
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models.functions import Distance
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from .models import Shop
 import requests
+
 
 class Home(generic.ListView):
     model = Shop
@@ -43,7 +44,9 @@ class Home(generic.ListView):
         user_location = self.get_user_location_coordinates(user_location_str)
 
         # Query for nearby shops
-        queryset = Shop.objects.annotate(
+        queryset = Shop.objects.prefetch_related(
+            'items'  # Prefetch related items
+        ).annotate(
             distance=Distance("location", user_location)
         ).order_by("distance")[:6]
 
@@ -71,3 +74,10 @@ def home(request):
     else:
         # If it's a GET request, render the form
         return render(request, 'shops/index.html')
+
+
+
+def shop_detail(request, shop_id):
+    shop = get_object_or_404(Shop, pk=shop_id)
+    items = shop.items.all()
+    return render(request, 'shops/shop_detail.html', {'shop': shop, 'items': items})

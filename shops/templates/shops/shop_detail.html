@@ -1,0 +1,12 @@
+<!-- shop_detail.html -->
+<h1>{{ shop.name }}</h1>
+<!-- Display other details about the shop -->
+<h2>Items:</h2>
+<ul>
+    {% for item in items %}
+        <li>{{ item.name }} - ${{ item.price }}</li>
+        <!-- Add more item details as needed -->
+    {% empty %}
+        <p>No items available in this shop.</p>
+    {% endfor %}
+</ul>
